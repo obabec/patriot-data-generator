@@ -63,6 +63,7 @@ public abstract class AbstractSensor extends AbstractDevice implements Sensor {
         }
 
         if(getNetworkAdapter() != null) {
+            LOGGER.info("HELE MAM TADY POSILAT PICOVINY");
             getNetworkAdapter().send(result);
         }
 

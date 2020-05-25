@@ -16,157 +16,27 @@
 
 package io.patriot_framework.sample;
 
-import io.patriot_framework.generator.device.impl.basicActuators.LinearActuator;
-import io.patriot_framework.generator.device.passive.actuators.Actuator;
-import io.patriot_framework.generator.device.passive.actuators.stateMachine.Condition;
-import io.patriot_framework.generator.device.passive.actuators.stateMachine.StateMachine;
+import io.patriot_framework.generator.dataFeed.DataFeed;
+import io.patriot_framework.generator.dataFeed.NormalDistributionDataFeed;
+import io.patriot_framework.generator.device.impl.basicDevices.Thermometer;
+import io.patriot_framework.generator.device.passive.sensors.SimpleSensor;
+import io.patriot_framework.generator.network.Enmasse;
+import io.patriot_framework.generator.network.wrappers.JSONWrapper;
+
+import java.util.HashMap;
 
 public class TestMain {
 
     public static void main(String[] args) {
-//        DataFeed df = new NormalDistributionDataFeed(18, 2);
-//        NetworkAdapter na = new Rest("http://requestbin.fullcontact.com/vlr0agvl", new JSONWrapper());
-//        SimpleSensor temperature = new Thermometer("thermometer", df);
-//        temperature.setNetworkAdapter(na);
-////        temperature.registerToCoapServer();
-////
+        DataFeed dataFeed = new NormalDistributionDataFeed(18, 3);
+        HashMap<String, String> secrets = new HashMap<>();
+        secrets.put("plain", "shit");
+        Enmasse enmasse = new Enmasse("xxx", "xxx", "xxx",
+                "fuckit", "fuckit2", 2, secrets, new JSONWrapper());
+        SimpleSensor device = new Thermometer("ThermometerExample", dataFeed);
+        device.setNetworkAdapter(enmasse);
 
-
-//        DataFeed df = new NormalDistributionDataFeed(18, 2);
-//        SimpleSensor temperature = new Thermometer("thermometer", df);
-//        temperature.registerToCoapServer();
-//
-//        DataFeed tf = new ConstantDataFeed(10000);
-//        ActiveDevice simulation = new ActiveDeviceImpl(tf, temperature);
-//        simulation.start();
-//
-//        CoapControlClient c = new CoapControlClient("coap://localhost:5683");
-//
-//        try {
-//            c.getDevice("thermometer").toggleDevice();
-//        } catch (ConnectorException | IOException e) {
-//            e.printStackTrace();
-//        }
-
-        Actuator actuator = new LinearActuator("trt", 10000);
-        actuator.registerToCoapServer();
-
-        Condition con = data -> {
-            if (data > 30) return "Fill sta";
-            return null;
-        };
-
-//        StateMachine st = new StateMachine.Builder()
-//
-//
-//
-//                .from("Zasunute")
-//                    .to("Pohyb D", Transition.DOWN)
-//                .from("Vysunute")
-//                .   to("Pohyb H", Transition.UP)
-//                .from("Pohyb D", 5000)
-//                    .to("Vysunute", Transition.DOWN)
-//                .from("Pohyb H", 5000)
-//                    .to("Zasunute", Transition.UP)
-//                .condition(con,10)
-////                    .to("Halt")
-//                //dat toto ako priklad do prace
-//                .from("A")
-//                    .to("C", "chuj", "B", 2000)
-//                .build();
-//
-//        actuator.setStateMachine(st);
-
-
-//        StateMachine machine1 = new StateMachine.Builder()
-//                .from("Off")
-//                    .to("ON", "start","Starting",  2000)  //jenom string, zmacknuti tlacitka
-//                .from("ON")
-////                    .to("Make coffee", "make", "Waiting for commands", 2000)
-////                .from("Make coffee", 1000)
-////                    .to("Checking water", "ajaj")
-////                .from("Checking water", 2000)
-//                .to("Fill water")
-//                    .condition(data -> {
-//                        if (true) return "Fill water";
-//
-//                        return "Enough water";
-//                    }, 10)
-//                .build();
-//        actuator.setStateMachine(machine1);
-
-
-
-
-        StateMachine machine1 = new StateMachine.Builder()
-//                .from("Off")
-//                .to("ON", "start","Starting",  2000)  //jenom string, zmacknuti tlacitka
-//                .from("ON")
-//                .to("Make coffee", "make", "Waiting for commands", 2000)
-//
-//
-//
-//                .from("Make coffee", 1000)
-//                .to("Checking water", "ajaj")
-
-                .from("Checking water", 1000)
-                .to("Fill water")
-                .to("Enough water")
-                .condition(data -> {
-                    if (true) return "Enough water";
-
-                    return "Fill water";
-                }, 10)
-
-                .from("Fill water",10000)
-//                .to("Enough water")
-//                .to("Fill water")
-//                .condition(checkWatt, defaultWater)
-//                .from("Enough water", 1000)
-//                .to("Checking coffee", "")
-//                .from("Checking coffee", 1000)
-//                .condition(checkCoff, defaultCoffee)
-//                .from("Fill coffee", 10000)
-//                .condition(checkCoff, defaultCoffee)
-//                .from("Enough coffee", 1000)
-//                .to("Coffee finished", buttonMakeCoff, "Making your coffee", 4000)
-
-                .build();
-
-        actuator.setStateMachine(machine1);
-
-
-
-
-//        st.transition(Transition.DOWN);
-//        st.transition(Transition.DOWN);
-
-
-        //vysonutom
-//        st.transition(Transition.DOWN, 60);
-//        st.transition(Transition.UP);
-
-        /**
-        kavovar - loop
-
-
-         Vysunute  ----> Zas(60) ---> poloha
-         Zasuvaju sa
-         Zsunute
-         Vysuvaju sa
-         Rotacia - x - uhol
-         */
-
-
-
-//        {
-//            "dataFeed": {
-//            "className": "io.patriot_framework.generator.dataFeed.ConstantDataFeed",
-//                    "label: "testUpdate"
-//            "timer": "2031232100"
-//        }
-//        }
-
+        enmasse.send(device.requestData());
     }
 
 }

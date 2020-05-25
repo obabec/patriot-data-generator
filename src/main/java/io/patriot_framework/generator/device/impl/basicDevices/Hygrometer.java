@@ -18,6 +18,7 @@ package io.patriot_framework.generator.device.impl.basicDevices;
 
 import io.patriot_framework.generator.dataFeed.DataFeed;
 import io.patriot_framework.generator.device.passive.sensors.AbstractSimpleSensor;
+import io.patriot_framework.generator.network.NetworkAdapter;
 
 /**
  * Class should be used when creating Humidity sensor. Generic types of DataFeed and Sensor itself are the same.

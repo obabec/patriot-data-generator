@@ -32,6 +32,7 @@ import java.util.List;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Rest.class, name = "rest"),
+        @JsonSubTypes.Type(value = Enmasse.class, name = "online"),
         @JsonSubTypes.Type(value = MQTT.class, name = "mqtt")
 })
 public interface NetworkAdapter {
